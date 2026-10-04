@@ -1,54 +1,83 @@
-# RMTS — Restaurant Management and POS System
+# RMTS — Restaurant Management & Traceability System
 
-Monorepo pour la gestion de restaurants et le point de vente (POS).
+Monorepo full-stack pour la gestion opérationnelle et la traçabilité financière des restaurants.
 
-## Structure
+## Statut
 
-```
+Ce dépôt est en **PHASE 0 (fondation)**:
+- structure monorepo en place,
+- base Docker/infra prête,
+- documentation de planification établie.
+
+Les fonctionnalités métier (DB complète, auth, RBAC, QR, commandes, paiements, audit) seront livrées par phases.
+
+## Stack
+
+- **Backend**: Node.js, TypeScript, NestJS, Prisma, PostgreSQL, Socket.IO
+- **Frontend**: Next.js, React, TypeScript
+- **Infra**: Docker Compose, Nginx, Redis
+- **Tests (cible)**: Jest, Supertest, Playwright
+
+## Structure du repo
+
+```text
 rmts/
 ├── apps/
-│   ├── api/              # Backend NestJS
-│   ├── customer-web/     # Interface client (QR / table)
-│   ├── restaurant-web/   # Interface restaurant (cuisine, caisse, etc.)
-│   └── owner-web/        # Interface propriétaire
+│   ├── api/
+│   ├── customer-web/
+│   ├── restaurant-web/
+│   └── owner-web/
 ├── packages/
-│   ├── ui/               # Composants UI partagés
-│   ├── types/            # Types TypeScript partagés
-│   ├── validation/       # Schemas Zod / validations
-│   ├── shared/           # Utilitaires partagés
-│   └── config/           # Configurations communes
-├── prisma/               # Schéma DB, migrations, seed
-├── docs/                 # Documentation projet
-├── docker/               # Nginx, Postgres
-├── scripts/              # Seed, backup, setup
-└── tests/                # E2E, integration, security
+│   ├── config/
+│   ├── shared/
+│   ├── types/
+│   ├── ui/
+│   └── validation/
+├── prisma/
+├── docs/
+├── scripts/
+├── docker/
+├── tests/
+├── DEVELOPMENT_PLAN.md
+├── .env.example
+├── docker-compose.yml
+└── package.json
 ```
 
 ## Prérequis
 
 - Node.js 20+
 - pnpm 9+
-- Docker (PostgreSQL / Redis)
+- Docker + Docker Compose
 
-## Démarrage rapide
+## Démarrage de la fondation
 
 ```bash
 cp .env.example .env
-pnpm install
 docker compose up -d
-pnpm db:migrate
+```
+
+Services lancés:
+- PostgreSQL (5432)
+- Redis (6379)
+- Nginx (80)
+
+## Démarrage applicatif (préparation phase suivante)
+
+```bash
+pnpm install
 pnpm dev
 ```
 
-## Applications
+## Variables d’environnement
 
-| App | Port (dev) | Description |
-|-----|------------|-------------|
-| `apps/api` | 3001 | API NestJS |
-| `apps/customer-web` | 3000 | Interface client |
-| `apps/restaurant-web` | 3002 | Interface restaurant |
-| `apps/owner-web` | 3003 | Interface propriétaire |
+Copier `.env.example` vers `.env`, puis adapter:
+- accès DB (`POSTGRES_*`, `DATABASE_URL`)
+- secrets JWT (`JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`)
+- URLs frontend/API
+- paramètres WhatsApp (mock ou provider réel)
 
 ## Documentation
 
-Voir le dossier [`docs/`](./docs/).
+- Plan principal: [`DEVELOPMENT_PLAN.md`](./DEVELOPMENT_PLAN.md)
+- Dossier docs: [`docs/`](./docs)
